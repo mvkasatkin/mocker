@@ -1,6 +1,6 @@
 {
-  "name": "mvkasatkin/phpunit-mocking",
-  "description": "Mocking examples for PHPUnit",
+  "name": "mvkasatkin/mocker",
+  "description": "Mocker helper for PHPUnit",
   "license": "MIT",
   "keywords": ["phpunit", "mock", "stub", "mocking"],
   "authors": [
@@ -14,5 +14,10 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mvkasatkin\\mocker\\": "src"
+    }
   }
 }
