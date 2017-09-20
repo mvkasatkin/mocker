@@ -23,6 +23,9 @@ class Method
 
     public function with($args)
     {
+        if ($args && !is_array($args)) {
+            $args = [$args];
+        }
         $this->args = $args;
         return $this;
     }

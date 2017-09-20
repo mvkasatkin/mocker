@@ -18,7 +18,7 @@ class MockerClassTest extends MockerTestCase
     {
         /** @var SomeClass $mock */
         $mock = Mocker::create(SomeClass::class, [
-            Mocker::method('publicMethod', 1, ['y'])->returns('x')
+            Mocker::method('publicMethod', 1, 'y')->returns('x')
         ]);
         $this->assertEquals('x', $mock->publicMethod('y'));
     }
