@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/mvkasatkin/mocker.svg?branch=master)](https://travis-ci.org/mvkasatkin/mocker)
 [![Coverage Status](https://coveralls.io/repos/github/mvkasatkin/mocker/badge.svg?branch=master)](https://coveralls.io/github/mvkasatkin/mocker?branch=master)
 
-Хэлпер для удобной работы с моками PHPUnit
+Хэлпер для удобной работы с моками PHPUnit. Использует поставляемую с PHPUnit библиотеку **phpunit/phpunit-mock-objects**. 
 
 ## Подключение
 
