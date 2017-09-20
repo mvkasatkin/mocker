@@ -58,23 +58,7 @@ class Mock
      */
     public function create()
     {
-        if (class_exists($this->classOrInterface)) {
-
-
-            // TODO merge ?
-
-
-            $mock = $this->generator->getMockForAbstractClass(
-                $this->classOrInterface,
-                $this->args ? $this->args : [],
-                '',
-                $this->args !== null,
-                true,
-                true,
-                array_keys($this->methods),
-                true
-            );
-        } elseif (interface_exists($this->classOrInterface)) {
+        if (class_exists($this->classOrInterface) || interface_exists($this->classOrInterface)) {
             $mock = $this->generator->getMockForAbstractClass(
                 $this->classOrInterface,
                 $this->args ? $this->args : [],
