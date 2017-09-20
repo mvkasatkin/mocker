@@ -52,6 +52,15 @@ In this example:
 *Mocking of private methods is impossible.*<br> 
 *Mocking of protected methods is possible, but it's not a «best practice».*<br> 
 
+## Test-double with constructor call
+
+```php
+        $mock = Mocker::create(SomeClass::class, [...], [$arg1, $arg2]);
+        $this->assertInstanceOf(SomeClass::class, $mock);
+```
+
+Constructor of the SomeClass will be invoked with args: $arg1, $arg2
+
 ### Protected properties and methods
 
 Despite the fact that testing internal implementation of classes is not the best practice, sometimes it is still necessary to set or verify a protected property, or to call a protected method.
