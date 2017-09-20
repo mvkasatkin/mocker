@@ -3,9 +3,10 @@
 [![Build Status](https://travis-ci.org/mvkasatkin/mocker.svg?branch=master)](https://travis-ci.org/mvkasatkin/mocker)
 [![Coverage Status](https://coveralls.io/repos/github/mvkasatkin/mocker/badge.svg?branch=master)](https://coveralls.io/github/mvkasatkin/mocker?branch=master)
 
-Хэлпер для удобной работы с моками PHPUnit. Использует поставляемую с PHPUnit библиотеку **phpunit/phpunit-mock-objects**. 
+Helper for convenient work with PHPUnit mocks.<br>
+It uses the library **phpunit/phpunit-mock-objects** supplied with PHPUnit. 
 
-## Подключение
+## Initialize
 
 ```php
     public function setUp()
@@ -15,16 +16,16 @@
     }
 ```
 
-## Дублирование классов
+## Simple test-double
 
-Работает с обычными классами, абстрактными классами и интерфейсами
+Works with regular classes, abstract classes and interfaces.
 
 ```php
         $mock = Mocker::create(SomeClass::class);
         $this->assertInstanceOf(SomeClass::class, $mock);
 ```
 
-## Дублирование классов и методов
+## Test-double with methods
 
 ```php
         $mock = Mocker::create(SomeClass::class, [
@@ -35,21 +36,21 @@
         ]);
 ```
 
-В этом примере:
+In this example:
 
-**$mock->firstMethod** - может быть вызван любое количество раз с любыми параметрами и вернет true<br>
-**$mock->secondMethod** - должен быть вызван один раз и вернет true<br>
-**$mock->thirdMethod** - должен быть вызван один раз с параметрами $param1, $param2 и вернет true<br>
-**$mock->fourthMethod** - должен быть вызван один раз с параметрами $param1, $param2 и вернет $value<br>
+**$mock->firstMethod** - can be called any number of times with any parameters and returns true<br>
+**$mock->secondMethod** - must be called once and returns true<br>
+**$mock->thirdMethod** - must be called once with the parameters $param1, $param2 and returns true<br>
+**$mock->fourthMethod** - must be called once with the parameters $param1, $param2 and returns $value<br>
 
-*Дубрирование приватных методов невозможно.*<br> 
-*Дубрирование защищенных методов возможно, но не является «best practice».*<br> 
+*Mocking of private methods is impossible.*<br> 
+*Mocking of protected methods is possible, but not  «best practice».*<br> 
 
-### Защищенные свойства и методы
+### Protected properties and methods
 
-Несмотря на то, что тестирование внутренней реализации классов не является лучшей практикой, иногда всё же требуется установить или проверить защищенное свойство, либо вызвать защищенный метод.
+Despite the fact that testing internal implementation of classes is not the best practice, sometimes it is still necessary to set or verify a protected property, or to call a protected method.
 
-Работает как с защищенными свойствами и методами, так и с приватными: 
+It works both with protected properties and methods, and with private: 
 
 ```php
         $o = new SomeClass();
