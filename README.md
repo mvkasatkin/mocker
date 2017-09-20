@@ -6,6 +6,8 @@
 Helper for convenient work with PHPUnit mocks.<br>
 It uses the library **phpunit/phpunit-mock-objects** supplied with PHPUnit. 
 
+## Install
+
 ## Initialize
 
 ```php
