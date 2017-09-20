@@ -18,7 +18,7 @@ class MockerClassTest extends MockerTestCase
     {
         /** @var SomeClass $mock */
         $mock = Mocker::create(SomeClass::class, [
-            Mocker::method('publicMethod', 1)->with(['y'])->returns('x')
+            Mocker::method('publicMethod', 1, ['y'])->returns('x')
         ]);
         $this->assertEquals('x', $mock->publicMethod('y'));
     }
@@ -27,7 +27,7 @@ class MockerClassTest extends MockerTestCase
     {
         /** @var SomeClass $mock */
         $mock = Mocker::create(SomeClass::class, [
-            Mocker::method('protectedMethod', 1)->with(['y'])->returns('x')
+            Mocker::method('protectedMethod', 1, ['y'])->returns('x')
         ]);
         $this->assertEquals('xX', $mock->publicMethod('y'));
     }
@@ -36,9 +36,11 @@ class MockerClassTest extends MockerTestCase
     {
         /** @var SomeClass $mock */
         $mock = Mocker::create(SomeClass::class, [
-            Mocker::method('privateMethod')->with(['y'])->returns('x') // no sense
+            Mocker::method('privateMethod', 0, ['y'])->returns('x') // no sense
         ]);
         $this->assertEquals('yZYX', $mock->publicMethod('y')); // NO MOCK for private methods
+        $this->assertEquals('y', Mocker::getProperty($mock, 'protectedProperty'));
+        $this->assertEquals('y', Mocker::getProperty($mock, 'privateProperty'));
     }
 
 }

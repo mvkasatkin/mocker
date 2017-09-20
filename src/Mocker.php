@@ -53,6 +53,65 @@ class Mocker
     }
 
     /**
+     * @param $object
+     * @param $propertyName
+     * @param $value
+     */
+    public static function setProperty($object, $propertyName, $value)
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        while ($reflectionClass && !$reflectionClass->hasProperty($propertyName)) {
+            $reflectionClass = $reflectionClass->getParentClass();
+        }
+        if ($reflectionClass && $reflectionClass->hasProperty($propertyName)) {
+            $reflectionProperty = $reflectionClass->getProperty($propertyName);
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setValue($object, $value);
+        }
+    }
+
+    /**
+     * @param $object
+     * @param $propertyName
+     *
+     * @return mixed
+     */
+    public static function getProperty($object, $propertyName)
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        while ($reflectionClass && !$reflectionClass->hasProperty($propertyName)) {
+            $reflectionClass = $reflectionClass->getParentClass();
+        }
+        if ($reflectionClass && $reflectionClass->hasProperty($propertyName)) {
+            $reflectionProperty = $reflectionClass->getProperty($propertyName);
+            $reflectionProperty->setAccessible(true);
+            return $reflectionProperty->getValue($object);
+        }
+        return null;
+    }
+
+    /**
+     * @param $object
+     * @param $methodName
+     * @param array $args
+     *
+     * @return mixed
+     */
+    public static function invoke($object, $methodName, array $args = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        while ($reflectionClass && !$reflectionClass->hasMethod($methodName)) {
+            $reflectionClass = $reflectionClass->getParentClass();
+        }
+        if ($reflectionClass && $reflectionClass->hasMethod($methodName)) {
+            $reflectionMethod = $reflectionClass->getMethod($methodName);
+            $reflectionMethod->setAccessible(true);
+            return call_user_func_array([$reflectionMethod, 'invoke'], array_merge([$object], $args));
+        }
+        return null;
+    }
+
+    /**
      * @return TestCase
      * @throws \Exception
      */

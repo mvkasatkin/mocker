@@ -39,7 +39,7 @@ class Mock
 
         foreach ($configItems as $item) {
             if ($item instanceof Method) {
-                $this->methods[$item->getName()] = $item;
+                $this->addMethod($item);
             }
         }
     }

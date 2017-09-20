@@ -2,6 +2,7 @@
 
 namespace Test;
 
+use Mvkasatkin\mocker\Mock;
 use Mvkasatkin\mocker\Mocker;
 use My\SomeAbstractClass;
 
@@ -48,6 +49,8 @@ class MockerAbstractTest extends MockerTestCase
             Mocker::method('privateMethod')->with(['y'])->returns('x') // no sense
         ]);
         $this->assertEquals('yZYX', $mock->publicMethod('y')); // NO MOCK for private methods
+        $this->assertEquals('y', Mocker::getProperty($mock, 'protectedProperty'));
+        $this->assertEquals('y', Mocker::getProperty($mock, 'privateProperty'));
     }
 
 }
