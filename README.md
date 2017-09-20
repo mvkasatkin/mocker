@@ -8,6 +8,10 @@ It uses the library **phpunit/phpunit-mock-objects** supplied with PHPUnit.
 
 ## Install
 
+```
+composer require mvkasatkin/mocker
+```
+
 ## Initialize
 
 ```php
