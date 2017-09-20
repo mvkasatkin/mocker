@@ -2,6 +2,9 @@
 
 namespace Mvkasatkin\mocker;
 
+use PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount;
+use PHPUnit_Framework_MockObject_Matcher_InvokedCount;
+
 class Mock
 {
 
@@ -10,6 +13,9 @@ class Mock
      */
     private $generator;
     private $classOrInterface;
+    /**
+     * @var Method[]
+     */
     private $methods = [];
     private $args;
 
@@ -53,19 +59,10 @@ class Mock
     public function create()
     {
         if (class_exists($this->classOrInterface)) {
-//            $object = $this->generator->getMock(
-//                $this->type,
-//                $this->methods,
-//                $this->constructorArgs,
-//                $this->mockClassName,
-//                $this->originalConstructor,
-//                $this->originalClone,
-//                $this->autoload,
-//                $this->cloneArguments,
-//                $this->callOriginalMethods,
-//                $this->proxyTarget,
-//                $this->allowMockingUnknownTypes
-//            );
+
+
+            // TODO merge ?
+
 
             $mock = $this->generator->getMockForAbstractClass(
                 $this->classOrInterface,
@@ -74,7 +71,7 @@ class Mock
                 $this->args !== null,
                 true,
                 true,
-                [],
+                array_keys($this->methods),
                 true
             );
         } elseif (interface_exists($this->classOrInterface)) {
@@ -85,12 +82,27 @@ class Mock
                 $this->args !== null,
                 true,
                 true,
-                [],
+                array_keys($this->methods),
                 true
             );
         } else {
             throw new \Exception('Class or interface not found: ' . $this->classOrInterface);
         }
+
+        foreach ($this->methods as $name => $method) {
+            $expectCallCount = $method->getExpectCallCount();
+            $m = $mock
+                ->expects($expectCallCount !== null
+                    ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
+                    : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
+                ->method($name)
+                ->willReturn($method->getWillReturn());
+            $with = $method->getWith();
+            if (is_array($with)) {
+                call_user_func_array([$m, 'with'], $with);
+            }
+        }
+
         return $mock;
     }
 }

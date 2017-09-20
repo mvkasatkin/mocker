@@ -20,12 +20,12 @@ class Mocker
 
     /**
      * @param $classOrInterface
-     * @param array $args - if not null - will be called constructor
      * @param array $configItems
+     * @param array $args - if not null - will be called constructor
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    public static function mock($classOrInterface, $args = null, array $configItems = [])
+    public static function create($classOrInterface, array $configItems = [], $args = null)
     {
         $generator = new PHPUnit_Framework_MockObject_Generator();
         $mock = (new Mock($generator, $classOrInterface, $args, $configItems))->create();

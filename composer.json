@@ -1,6 +1,6 @@
 {
   "name": "mvkasatkin/mocker",
-  "description": "Mocker helper for PHPUnit",
+  "description": "Mocking helper for PHPUnit",
   "license": "MIT",
   "keywords": ["phpunit", "mock", "stub", "mocking"],
   "authors": [
@@ -10,10 +10,10 @@
     }
   ],
   "require": {
-    "php": ">=7.0.0"
+    "php": ">=7.0.0",
+    "phpunit/phpunit": "^6"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6"
   },
   "autoload": {
     "psr-4": {

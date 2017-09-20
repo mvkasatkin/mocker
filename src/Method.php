@@ -5,11 +5,9 @@ namespace Mvkasatkin\mocker;
 class Method
 {
 
-    const ANY = '__any';
-
     protected $name;
     protected $expectCallCount = null;
-    protected $willReturn = self::ANY;
+    protected $willReturn;
     protected $args;
 
     public function __construct($name)
@@ -23,9 +21,10 @@ class Method
         return $this;
     }
 
-    public function with(...$args)
+    public function with($args)
     {
         $this->args = $args;
+        return $this;
     }
 
     public function returns($value)
