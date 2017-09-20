@@ -40,11 +40,11 @@ In this example:
 
 **$mock->firstMethod** - can be called any number of times with any parameters and returns true<br>
 **$mock->secondMethod** - must be called once and returns true<br>
-**$mock->thirdMethod** - must be called once with the parameters $param1, $param2 and returns true<br>
+**$mock->thirdMethod** - must be called once with the parameters $param1, $param2 and returns $value<br>
 **$mock->fourthMethod** - must be called once with the parameters $param1, $param2 and returns $value<br>
 
 *Mocking of private methods is impossible.*<br> 
-*Mocking of protected methods is possible, but not  «best practice».*<br> 
+*Mocking of protected methods is possible, but it's not a «best practice».*<br> 
 
 ### Protected properties and methods
 
