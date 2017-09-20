@@ -2,6 +2,7 @@
 
 namespace Test;
 
+use Mvkasatkin\mocker\Mock;
 use Mvkasatkin\mocker\Mocker;
 use My\SomeClass;
 
@@ -41,6 +42,24 @@ class MockerClassTest extends MockerTestCase
         $this->assertEquals('yZYX', $mock->publicMethod('y')); // NO MOCK for private methods
         $this->assertEquals('y', Mocker::getProperty($mock, 'protectedProperty'));
         $this->assertEquals('y', Mocker::getProperty($mock, 'privateProperty'));
+    }
+
+    public function testMethodWithMap()
+    {
+        /** @var SomeClass $mock */
+        $mock = Mocker::create(SomeClass::class, [
+            Mocker::method('checkMap', 5)->returnsMap([
+                ['arg1', 'arg2', 'arg3', 'A'],
+                ['arg1', 'arg2', null, 'B'],
+                ['arg1', null, null, 'C'],
+                [null, null, null, 'D'],
+            ]),
+        ]);
+        $this->assertEquals('A', $mock->checkMap('arg1', 'arg2', 'arg3'));
+        $this->assertEquals('B', $mock->checkMap('arg1', 'arg2'));
+        $this->assertEquals('C', $mock->checkMap('arg1'));
+        $this->assertEquals('D', $mock->checkMap());
+        $this->assertEquals(null, $mock->checkMap('a', 'b', 'c'));
     }
 
 }

@@ -13,9 +13,6 @@ class Mock
      */
     private $generator;
     private $classOrInterface;
-    /**
-     * @var Method[]
-     */
     private $methods = [];
     private $args;
 
@@ -49,7 +46,11 @@ class Mock
      */
     public function addMethod(Method $method)
     {
-        $this->methods[$method->getName()] = $method;
+        $methodName = $method->getName();
+        if (!isset($this->methods[$methodName])) {
+            $this->methods[$methodName] = [];
+        }
+        $this->methods[$methodName][] = $method;
     }
 
     /**
@@ -73,17 +74,34 @@ class Mock
             throw new \Exception('Class or interface not found: ' . $this->classOrInterface);
         }
 
-        foreach ($this->methods as $name => $method) {
-            $expectCallCount = $method->getExpectCallCount();
-            $m = $mock
-                ->expects($expectCallCount !== null
-                    ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
-                    : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
-                ->method($name)
-                ->willReturn($method->getWillReturn());
-            $with = $method->getWith();
-            if (is_array($with)) {
-                call_user_func_array([$m, 'with'], $with);
+        foreach ($this->methods as $name => $methods) {
+            /** @var Method $method */
+            foreach ($methods as $method) {
+                $expectCallCount = $method->getExpectCallCount();
+                $m = $mock
+                    ->expects($expectCallCount !== null
+                        ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
+                        : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
+                    ->method($name);
+
+                $with = $method->getWith();
+                $willReturn = $method->getWillReturn();
+                $willReturnMap = $method->getWillReturnMap();
+                if ($willReturnMap) {
+                    if ($willReturn) {
+                        throw new \Exception('Cannot use both returns() and returnsWithMap()');
+                    }
+                    if ($with) {
+                        throw new \Exception('Cannot use both with() and returnsWithMap()');
+                    }
+                    $m->willReturnMap($willReturnMap);
+                } else {
+                    $m->willReturn($willReturn);
+                }
+
+                if (is_array($with)) {
+                    call_user_func_array([$m, 'with'], $with);
+                }
             }
         }
 

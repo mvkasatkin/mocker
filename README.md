@@ -49,6 +49,25 @@ In this example:
 **$mock->thirdMethod** - must be called once with the parameters $param1, $param2 and returns $value<br>
 **$mock->fourthMethod** - must be called once with the parameters $param1, $param2 and returns $value<br>
 
+## Test-double with/return map:
+
+```php
+        /** @var SomeClass $mock */
+        $mock = Mocker::create(SomeClass::class, [
+            Mocker::method('checkMap', 5)->returnsMap([
+                ['arg1', 'arg2', 'arg3', 'A'],
+                ['arg1', 'arg2', null, 'B'],
+                ['arg1', null, null, 'C'],
+                [null, null, null, 'D'],
+            ]),
+        ]);
+        $this->assertEquals('A', $mock->checkMap('arg1', 'arg2', 'arg3'));
+        $this->assertEquals('B', $mock->checkMap('arg1', 'arg2'));
+        $this->assertEquals('C', $mock->checkMap('arg1'));
+        $this->assertEquals('D', $mock->checkMap());
+        $this->assertEquals(null, $mock->checkMap('a', 'b', 'c'));
+```
+
 *Mocking of private methods is impossible.*<br> 
 *Mocking of protected methods is possible, but it's not a «best practice».*<br> 
 

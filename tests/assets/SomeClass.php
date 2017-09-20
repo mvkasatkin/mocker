@@ -4,7 +4,6 @@ namespace My;
 
 class SomeClass
 {
-
     protected $protectedProperty;
     private $privateProperty;
 
@@ -25,4 +24,8 @@ class SomeClass
         return $a . 'Z';
     }
 
+    public function checkMap($arg1 = null, $arg2 = null, $arg3 = null)
+    {
+        return [$arg1, $arg2, $arg3];
+    }
 }
