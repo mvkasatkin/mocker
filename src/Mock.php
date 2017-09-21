@@ -59,6 +59,23 @@ class Mock
      */
     public function create()
     {
+        $mock = $this->createMock();
+        foreach ($this->methods as $name => $methods) {
+            /** @var Method $method */
+            foreach ($methods as $method) {
+                $this->addMockMethod($mock, $method, $name);
+            }
+        }
+
+        return $mock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @throws \Exception
+     */
+    protected function createMock()
+    {
         if (class_exists($this->classOrInterface) || interface_exists($this->classOrInterface)) {
             $mock = $this->generator->getMockForAbstractClass(
                 $this->classOrInterface,
@@ -73,38 +90,42 @@ class Mock
         } else {
             throw new \Exception('Class or interface not found: ' . $this->classOrInterface);
         }
+        return $mock;
+    }
 
-        foreach ($this->methods as $name => $methods) {
-            /** @var Method $method */
-            foreach ($methods as $method) {
-                $expectCallCount = $method->getExpectCallCount();
-                $m = $mock
-                    ->expects($expectCallCount !== null
-                        ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
-                        : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount)
-                    ->method($name);
+    /**
+     * @param $mock
+     * @param $method
+     * @param $name
+     *
+     * @throws \Exception
+     */
+    protected function addMockMethod(\PHPUnit_Framework_MockObject_MockObject $mock, Method $method, $name)
+    {
+        $expectCallCount = $method->getExpectCallCount();
+        $mockMethod = $mock->expects(
+            $expectCallCount !== null
+            ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
+            : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+        )->method($name);
 
-                $with = $method->getWith();
-                $willReturn = $method->getWillReturn();
-                $willReturnMap = $method->getWillReturnMap();
-                if ($willReturnMap) {
-                    if ($willReturn) {
-                        throw new \Exception('Cannot use both returns() and returnsWithMap()');
-                    }
-                    if ($with) {
-                        throw new \Exception('Cannot use both with() and returnsWithMap()');
-                    }
-                    $m->willReturnMap($willReturnMap);
-                } else {
-                    $m->willReturn($willReturn);
-                }
-
-                if (is_array($with)) {
-                    call_user_func_array([$m, 'with'], $with);
-                }
+        $with = $method->getWith();
+        $willReturn = $method->getWillReturn();
+        $willReturnMap = $method->getWillReturnMap();
+        if ($willReturnMap) {
+            if ($willReturn) {
+                throw new \Exception('Cannot use both returns() and returnsWithMap()');
             }
+            if ($with) {
+                throw new \Exception('Cannot use both with() and returnsWithMap()');
+            }
+            $mockMethod->willReturnMap($willReturnMap);
+        } else {
+            $mockMethod->willReturn($willReturn);
         }
 
-        return $mock;
+        if (is_array($with)) {
+            call_user_func_array([$mockMethod, 'with'], $with);
+        }
     }
 }
