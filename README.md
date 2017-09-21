@@ -80,7 +80,7 @@ In this example:
 
 Constructor of the SomeClass will be invoked with args: $arg1, $arg2
 
-### Protected properties and methods
+## Protected properties and methods
 
 Despite the fact that testing internal implementation of classes is not the best practice, sometimes it is still necessary to set or verify a protected property, or to call a protected method.
 
