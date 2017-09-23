@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/mvkasatkin/mocker.svg?branch=master)](https://travis-ci.org/mvkasatkin/mocker)
 [![Coverage Status](https://coveralls.io/repos/github/mvkasatkin/mocker/badge.svg?branch=master)](https://coveralls.io/github/mvkasatkin/mocker?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/mvkasatkin/mocker/version)](https://packagist.org/packages/mvkasatkin/mocker)
+[![License](https://poser.pugx.org/mvkasatkin/mocker/license)](https://packagist.org/packages/mvkasatkin/mocker)
 
 Helper for convenient work with PHPUnit mocks.<br>
 It uses the library **phpunit/phpunit-mock-objects** supplied with PHPUnit. 

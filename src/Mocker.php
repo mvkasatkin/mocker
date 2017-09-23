@@ -24,9 +24,13 @@ class Mocker
      * @param array $args - if not null - will be called constructor
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
+     * @throws \Exception
      */
-    public static function create($classOrInterface, array $configItems = [], $args = null)
-    {
+    public static function create(
+        $classOrInterface,
+        array $configItems = [],
+        $args = null
+    ): \PHPUnit_Framework_MockObject_MockObject {
         $generator = new PHPUnit_Framework_MockObject_Generator();
         $mock = (new Mock($generator, $classOrInterface, $args, $configItems))->create();
         self::getTestCase()->registerMockObject($mock);
@@ -40,7 +44,7 @@ class Mocker
      *
      * @return Method
      */
-    public static function method($name, int $count = null, $with = null)
+    public static function method($name, int $count = null, $with = null): Method
     {
         $method = new Method($name);
         if ($count !== null) {
@@ -56,6 +60,8 @@ class Mocker
      * @param $object
      * @param $propertyName
      * @param $value
+     *
+     * @throws \ReflectionException
      */
     public static function setProperty($object, $propertyName, $value)
     {
@@ -75,6 +81,7 @@ class Mocker
      * @param $propertyName
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public static function getProperty($object, $propertyName)
     {
@@ -96,6 +103,7 @@ class Mocker
      * @param array $args
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public static function invoke($object, $methodName, array $args = [])
     {
@@ -115,10 +123,10 @@ class Mocker
      * @return TestCase
      * @throws \Exception
      */
-    protected static function getTestCase()
+    protected static function getTestCase(): TestCase
     {
         if (self::$testCase === null) {
-            throw new \Exception('TestCase not found. Use Mocker::setTestCase');
+            throw new \RuntimeException('TestCase not found. Use Mocker::setTestCase');
         }
         return self::$testCase;
     }

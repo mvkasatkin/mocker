@@ -5,7 +5,7 @@ namespace Mvkasatkin\mocker;
 class Method
 {
     protected $name;
-    protected $expectCallCount = null;
+    protected $expectCallCount;
     protected $willReturn;
     protected $willReturnMap = [];
     protected $args;
@@ -71,7 +71,7 @@ class Method
         return $this->willReturn;
     }
 
-    public function getWillReturnMap()
+    public function getWillReturnMap(): array
     {
         return $this->willReturnMap;
     }

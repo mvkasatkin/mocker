@@ -57,11 +57,11 @@ class Mock
      * @return \PHPUnit_Framework_MockObject_MockObject
      * @throws \Exception
      */
-    public function create()
+    public function create(): \PHPUnit_Framework_MockObject_MockObject
     {
         $mock = $this->createMock();
         foreach ($this->methods as $name => $methods) {
-            /** @var Method $method */
+            /** @var Method[] $methods */
             foreach ($methods as $method) {
                 $this->addMockMethod($mock, $method, $name);
             }
@@ -74,21 +74,20 @@ class Mock
      * @return \PHPUnit_Framework_MockObject_MockObject
      * @throws \Exception
      */
-    protected function createMock()
+    protected function createMock(): \PHPUnit_Framework_MockObject_MockObject
     {
         if (class_exists($this->classOrInterface) || interface_exists($this->classOrInterface)) {
             $mock = $this->generator->getMockForAbstractClass(
                 $this->classOrInterface,
-                $this->args ? $this->args : [],
+                $this->args ?: [],
                 '',
                 $this->args !== null,
                 true,
                 true,
-                array_keys($this->methods),
-                true
+                array_keys($this->methods)
             );
         } else {
-            throw new \Exception('Class or interface not found: ' . $this->classOrInterface);
+            throw new \RuntimeException('Class or interface not found: ' . $this->classOrInterface);
         }
         return $mock;
     }
@@ -114,10 +113,10 @@ class Mock
         $willReturnMap = $method->getWillReturnMap();
         if ($willReturnMap) {
             if ($willReturn) {
-                throw new \Exception('Cannot use both returns() and returnsWithMap()');
+                throw new \RuntimeException('Cannot use both returns() and returnsWithMap()');
             }
             if ($with) {
-                throw new \Exception('Cannot use both with() and returnsWithMap()');
+                throw new \RuntimeException('Cannot use both with() and returnsWithMap()');
             }
             $mockMethod->willReturnMap($willReturnMap);
         } else {
