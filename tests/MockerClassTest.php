@@ -44,6 +44,14 @@ class MockerClassTest extends MockerTestCase
         $this->assertEquals('y', Mocker::getProperty($mock, 'privateProperty'));
     }
 
+    public function testReturnsSelf()
+    {
+        /** @var SomeClass $mock */
+        $mock = Mocker::create(SomeClass::class, [
+            Mocker::method('returnSelf', 1)->returnsSelf()
+        ]);
+        $this->assertEquals($mock, $mock->returnSelf());
+    }
     public function testMethodWithMap()
     {
         /** @var SomeClass $mock */

@@ -4,6 +4,7 @@ namespace Mvkasatkin\mocker;
 
 use PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount;
 use PHPUnit_Framework_MockObject_Matcher_InvokedCount;
+use PHPUnit_Framework_MockObject_Stub_ReturnSelf;
 
 class Mock
 {
@@ -57,11 +58,11 @@ class Mock
      * @return \PHPUnit_Framework_MockObject_MockObject
      * @throws \Exception
      */
-    public function create(): \PHPUnit_Framework_MockObject_MockObject
+    public function create()
     {
         $mock = $this->createMock();
         foreach ($this->methods as $name => $methods) {
-            /** @var Method[] $methods */
+            /** @var Method $method */
             foreach ($methods as $method) {
                 $this->addMockMethod($mock, $method, $name);
             }
@@ -74,20 +75,21 @@ class Mock
      * @return \PHPUnit_Framework_MockObject_MockObject
      * @throws \Exception
      */
-    protected function createMock(): \PHPUnit_Framework_MockObject_MockObject
+    protected function createMock()
     {
         if (class_exists($this->classOrInterface) || interface_exists($this->classOrInterface)) {
             $mock = $this->generator->getMockForAbstractClass(
                 $this->classOrInterface,
-                $this->args ?: [],
+                $this->args ? $this->args : [],
                 '',
                 $this->args !== null,
                 true,
                 true,
-                array_keys($this->methods)
+                array_keys($this->methods),
+                true
             );
         } else {
-            throw new \RuntimeException('Class or interface not found: ' . $this->classOrInterface);
+            throw new \Exception('Class or interface not found: ' . $this->classOrInterface);
         }
         return $mock;
     }
@@ -104,8 +106,8 @@ class Mock
         $expectCallCount = $method->getExpectCallCount();
         $mockMethod = $mock->expects(
             $expectCallCount !== null
-            ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
-            : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+                ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
+                : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
         )->method($name);
 
         $with = $method->getWith();
@@ -113,12 +115,14 @@ class Mock
         $willReturnMap = $method->getWillReturnMap();
         if ($willReturnMap) {
             if ($willReturn) {
-                throw new \RuntimeException('Cannot use both returns() and returnsWithMap()');
+                throw new \Exception('Cannot use both returns() and returnsWithMap()');
             }
             if ($with) {
-                throw new \RuntimeException('Cannot use both with() and returnsWithMap()');
+                throw new \Exception('Cannot use both with() and returnsWithMap()');
             }
             $mockMethod->willReturnMap($willReturnMap);
+        } elseif ($willReturn instanceof PHPUnit_Framework_MockObject_Stub_ReturnSelf) {
+            $mockMethod->willReturnSelf();
         } else {
             $mockMethod->willReturn($willReturn);
         }

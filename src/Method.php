@@ -2,10 +2,12 @@
 
 namespace Mvkasatkin\mocker;
 
+use PHPUnit_Framework_MockObject_Stub_ReturnSelf;
+
 class Method
 {
     protected $name;
-    protected $expectCallCount;
+    protected $expectCallCount = null;
     protected $willReturn;
     protected $willReturnMap = [];
     protected $args;
@@ -56,6 +58,15 @@ class Method
         return $this;
     }
 
+    /**
+     * @return $this
+     */
+    public function returnsSelf()
+    {
+        $this->willReturn = new PHPUnit_Framework_MockObject_Stub_ReturnSelf();
+        return $this;
+    }
+
     public function getName()
     {
         return $this->name;
@@ -71,7 +82,7 @@ class Method
         return $this->willReturn;
     }
 
-    public function getWillReturnMap(): array
+    public function getWillReturnMap()
     {
         return $this->willReturnMap;
     }
