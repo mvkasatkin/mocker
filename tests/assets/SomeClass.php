@@ -7,6 +7,11 @@ class SomeClass
     protected $protectedProperty;
     private $privateProperty;
 
+    public function returnSelf()
+    {
+        return false;
+    }
+
     public function publicMethod($a)
     {
         return $this->protectedMethod($a) . 'X';

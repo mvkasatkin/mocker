@@ -2,15 +2,17 @@
 
 namespace Mvkasatkin\mocker;
 
-use PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount;
-use PHPUnit_Framework_MockObject_Matcher_InvokedCount;
-use PHPUnit_Framework_MockObject_Stub_ReturnSelf;
+use PHPUnit\Framework\MockObject\Generator;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
+use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub\ReturnSelf;
 
 class Mock
 {
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Generator
+     * @var Generator
      */
     private $generator;
     private $classOrInterface;
@@ -20,13 +22,13 @@ class Mock
     /**
      * Mock constructor.
      *
-     * @param \PHPUnit_Framework_MockObject_Generator $generator
+     * @param Generator $generator
      * @param $classOrInterface
      * @param array $args
      * @param array $configItems
      */
     public function __construct(
-        \PHPUnit_Framework_MockObject_Generator $generator,
+        Generator $generator,
         $classOrInterface,
         $args = null,
         array $configItems = []
@@ -55,7 +57,7 @@ class Mock
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @throws \Exception
      */
     public function create()
@@ -72,7 +74,7 @@ class Mock
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @throws \Exception
      */
     protected function createMock()
@@ -106,8 +108,8 @@ class Mock
         $expectCallCount = $method->getExpectCallCount();
         $mockMethod = $mock->expects(
             $expectCallCount !== null
-                ? new PHPUnit_Framework_MockObject_Matcher_InvokedCount($expectCallCount)
-                : new PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+                ? new InvokedCount($expectCallCount)
+                : new AnyInvokedCount()
         )->method($name);
 
         $with = $method->getWith();
@@ -121,7 +123,7 @@ class Mock
                 throw new \Exception('Cannot use both with() and returnsWithMap()');
             }
             $mockMethod->willReturnMap($willReturnMap);
-        } elseif ($willReturn instanceof PHPUnit_Framework_MockObject_Stub_ReturnSelf) {
+        } elseif ($willReturn instanceof ReturnSelf) {
             $mockMethod->willReturnSelf();
         } else {
             $mockMethod->willReturn($willReturn);

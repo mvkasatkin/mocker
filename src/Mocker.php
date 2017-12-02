@@ -2,8 +2,9 @@
 
 namespace Mvkasatkin\mocker;
 
+use PHPUnit\Framework\MockObject\Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_Generator;
 
 class Mocker
 {
@@ -23,11 +24,11 @@ class Mocker
      * @param array $configItems
      * @param array $args - if not null - will be called constructor
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     public static function create($classOrInterface, array $configItems = [], $args = null)
     {
-        $generator = new PHPUnit_Framework_MockObject_Generator();
+        $generator = new Generator();
         $mock = (new Mock($generator, $classOrInterface, $args, $configItems))->create();
         self::getTestCase()->registerMockObject($mock);
         return $mock;

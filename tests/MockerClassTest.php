@@ -50,7 +50,9 @@ class MockerClassTest extends MockerTestCase
         $mock = Mocker::create(SomeClass::class, [
             Mocker::method('returnSelf', 1)->returnsSelf()
         ]);
-        $this->assertEquals($mock, $mock->returnSelf());
+        $result = $mock->returnSelf();
+        $this->assertEquals($mock, $result);
+        $this->assertSame($mock, $result);
     }
     public function testMethodWithMap()
     {

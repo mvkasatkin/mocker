@@ -2,7 +2,7 @@
 
 namespace Mvkasatkin\mocker;
 
-use PHPUnit_Framework_MockObject_Stub_ReturnSelf;
+use PHPUnit\Framework\MockObject\Stub\ReturnSelf;
 
 class Method
 {
@@ -63,7 +63,7 @@ class Method
      */
     public function returnsSelf()
     {
-        $this->willReturn = new PHPUnit_Framework_MockObject_Stub_ReturnSelf();
+        $this->willReturn = new ReturnSelf();
         return $this;
     }
 
