@@ -20,6 +20,20 @@ class Mocker
     }
 
     /**
+     * Alias for create() to perform IDE autocomplete
+     *
+     * @param $classOrInterface
+     * @param array $configItems
+     * @param array $args - if not null - will be called constructor
+     *
+     * @return MockObject
+     */
+    public static function get($classOrInterface, array $configItems = [], $args = null)
+    {
+        return self::create($classOrInterface, $configItems, $args);
+    }
+
+    /**
      * @param $classOrInterface
      * @param array $configItems
      * @param array $args - if not null - will be called constructor
