@@ -4,6 +4,7 @@ namespace Test;
 
 use Mvkasatkin\mocker\Mock;
 use Mvkasatkin\mocker\Mocker;
+use Mvkasatkin\mocker\MockerContainer;
 use My\SomeAbstractClass;
 
 class MockerAbstractTest extends MockerTestCase
@@ -11,14 +12,14 @@ class MockerAbstractTest extends MockerTestCase
 
     public function testDummyAbstractClass()
     {
-        $mock = Mocker::get(SomeAbstractClass::class);
+        $mock = (new MockerContainer())->get(SomeAbstractClass::class);
         $this->assertInstanceOf(SomeAbstractClass::class, $mock);
     }
 
     public function testStubAbstractMethod()
     {
         /** @var SomeAbstractClass $mock */
-        $mock = Mocker::get(SomeAbstractClass::class, [
+        $mock = Mocker::create(SomeAbstractClass::class, [
             Mocker::method('abstractMethod', 1)->with(['y'])->returns('x')
         ]);
         $this->assertEquals('x', $mock->abstractMethod('y'));
@@ -27,7 +28,7 @@ class MockerAbstractTest extends MockerTestCase
     public function testStubPublicMethod()
     {
         /** @var SomeAbstractClass $mock */
-        $mock = Mocker::get(SomeAbstractClass::class, [
+        $mock = Mocker::create(SomeAbstractClass::class, [
             Mocker::method('publicMethod', 1)->with(['y'])->returns('x')
         ]);
         $this->assertEquals('x', $mock->publicMethod('y'));
@@ -36,7 +37,7 @@ class MockerAbstractTest extends MockerTestCase
     public function testStubInternalProtectedMethod()
     {
         /** @var SomeAbstractClass $mock */
-        $mock = Mocker::get(SomeAbstractClass::class, [
+        $mock = Mocker::create(SomeAbstractClass::class, [
             Mocker::method('protectedMethod', 1)->with(['y'])->returns('x')
         ]);
         $this->assertEquals('xX', $mock->publicMethod('y'));
@@ -45,7 +46,7 @@ class MockerAbstractTest extends MockerTestCase
     public function testStubInternalPrivateMethod()
     {
         /** @var SomeAbstractClass $mock */
-        $mock = Mocker::get(SomeAbstractClass::class, [
+        $mock = Mocker::create(SomeAbstractClass::class, [
             Mocker::method('privateMethod')->with(['y'])->returns('x') // no sense
         ]);
         $this->assertEquals('yZYX', $mock->publicMethod('y')); // NO MOCK for private methods

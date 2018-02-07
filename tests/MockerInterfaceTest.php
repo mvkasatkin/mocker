@@ -10,14 +10,14 @@ class MockerInterfaceTest extends MockerTestCase
 
     public function testDummyInterface()
     {
-        $mock = Mocker::get(SomeInterface::class);
+        $mock = Mocker::create(SomeInterface::class);
         $this->assertInstanceOf(SomeInterface::class, $mock);
     }
 
     public function testStubPublicMethod()
     {
         /** @var SomeInterface $mock */
-        $mock = Mocker::get(SomeInterface::class, [
+        $mock = Mocker::create(SomeInterface::class, [
             Mocker::method('interfaceMethod', 1)->with(['y'])->returns('x')
         ]);
         $this->assertEquals('x', $mock->interfaceMethod('y'));
